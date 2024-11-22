@@ -1,35 +1,44 @@
 def main():
-    while True:
-        try:
-            # Prompt user for a fraction
-            fraction = input("Fraction: ").strip()
+    fraction = input("Fraction: ")
+    try:
+        percentage = convert(fraction)
+        print(gauge(percentage))
+    except (ValueError, ZeroDivisionError):
+        print("Invalid input")
 
-            # Split the fraction into X and Y
-            x, y = map(int, fraction.split("/"))
 
-            # Validate that Y is not zero and X is not greater than Y
-            if y == 0:
-                raise ZeroDivisionError
-            if x > y:
-                raise ValueError
+def convert(fraction):
+    """
+    Convert a fraction string (X/Y) to a percentage.
+    Raise ValueError if X and/or Y are not integers or if X > Y.
+    Raise ZeroDivisionError if Y == 0.
+    """
+    try:
+        x, y = map(int, fraction.split("/"))
+        if y == 0:
+            raise ZeroDivisionError
+        if x > y:
+            raise ValueError
+        return round((x / y) * 100)
+    except (ValueError, ZeroDivisionError):
+        raise
 
-            # Calculate the percentage
-            percentage = round((x / y) * 100)
 
-            # Output based on the percentage
-            if percentage <= 1:
-                print("E")
-            elif percentage >= 99:
-                print("F")
-            else:
-                print(f"{percentage}%")
-
-            break  # Exit the loop after successful input and output
-
-        except (ValueError, ZeroDivisionError):
-            # Handle invalid input and prompt again
-            pass
+def gauge(percentage):
+    """
+    Return:
+    - "E" if percentage <= 1
+    - "F" if percentage >= 99
+    - "Z%" otherwise, where Z is the percentage
+    """
+    if percentage <= 1:
+        return "E"
+    elif percentage >= 99:
+        return "F"
+    else:
+        return f"{percentage}%"
 
 
 if __name__ == "__main__":
     main()
+
